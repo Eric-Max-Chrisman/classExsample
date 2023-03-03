@@ -21,4 +21,17 @@ async function getUserByEmail(email: string): Promise<User | null> {
   return await userRepository.findOne({ where: { email } });
 }
 
-export { addUser, getUserByEmail };
+async function getUserById(id: string): Promise<User | null>{
+  const user = await userRepository.findOne({
+    where:{
+      userId: id
+    }
+  });
+  return user;
+}
+
+// getViralUsers
+
+// getUserByViews
+
+export { addUser, getUserByEmail, getUserById };
