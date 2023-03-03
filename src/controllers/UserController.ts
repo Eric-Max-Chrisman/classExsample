@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import argon2 from 'argon2';
-import { addUser, getUserByEmail } from '../models/UserModel';
+import { addUser, getUserByEmail, getUserById, getUsersByViews } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 
 async function registerUser(req: Request, res: Response): Promise<void> {
@@ -25,9 +25,17 @@ async function logIn(req: Request, res: Response): Promise<void> {
   const { email, password } = req.body as AuthRequest;
 
   const user = await getUserByEmail(email);
+  const user2 = await getUserById(email);
+  const user3 = await getUsersByViews(0);
+  if(!user2){
+    // res.sendStatus(404); // testCode
+  }
+
+  if(!user3){}
 
   // Check if the user account exists for that email
   if (!user) {
+    
     res.sendStatus(404); // 404 Not Found (403 Forbidden would also make a lot of sense here)
     return;
   }
