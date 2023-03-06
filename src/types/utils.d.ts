@@ -8,3 +8,9 @@ type AuthRequest = {
   email: string;
   password: string;
 };
+
+// for changing user email
+type UserIdEmailParam = {
+  userId: string;
+  newEmail: string;
+}

@@ -1,3 +1,4 @@
+// import { updateEmailIdSearch } from '../controllers/UserController';
 import { AppDataSource } from '../dataSource';
 import { User } from '../entities/User';
 
@@ -35,7 +36,7 @@ async function getUserById(id: string): Promise<User | null>{
   });
   return user;
 }
-//
+
 // getViralUsers
 async function allVerifiedUsers(): Promise<User[]>{
   const allVerifiedUsers = await userRepository.find({
@@ -63,4 +64,41 @@ async function getUsersByViews(minViews: number): Promise<User[]> {
   return users;
 }
 
-export { addUser, getUserByEmail, getUserById, getUsersByViews, allUserData, allVerifiedUsers };
+async function updateEmail(userData: User, newEmail: string): Promise<User>{
+  const updatedUser = userData;
+  updatedUser.email = newEmail;
+
+  await userRepository
+  .createQueryBuilder()
+  .update(User)
+  .set({email: updatedUser.email})
+  .where({ userId: updatedUser.userId})
+  .execute();
+
+  return updatedUser;
+}
+
+export { addUser, getUserByEmail, getUserById, getUsersByViews, allUserData, allVerifiedUsers, updateEmail };
+
+/*
+updating data
+async function resetAllUnverifiedProfileViews(): Promise<void> { // change all users
+  await userRepository
+  .createQueryBuilder()
+  .update(User)
+  .set({profileViews: 0})
+  .execute();
+}
+
+async function resetAllUnverifiedProfileViews(): Promise<void> { // change all unverified
+  let usersChanged; // check docs
+  usersChanged = await userRepository
+  .createQueryBuilder()
+  .update(User)
+  .set({profileViews: 0})
+  .where('unverified <> true')
+  .execute();
+}
+
+
+*/
